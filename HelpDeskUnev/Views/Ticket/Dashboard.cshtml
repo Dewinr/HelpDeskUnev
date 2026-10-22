@@ -1,0 +1,181 @@
+﻿@model HelpDeskUnev.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard Institucional";
+}
+
+<div class="container-fluid py-4">
+    <!-- Encabezado -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold" style="color: var(--color-vino);">Panel General (Dashboard)</h3>
+            <p class="text-muted small">Indicadores y métricas en tiempo real del sistema Help Desk UNEV</p>
+        </div>
+        <div>
+            <span class="badge bg-light text-dark border p-2">
+                <i class="bi bi-person-badge me-1"></i> Rol: @User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value
+            </span>
+        </div>
+    </div>
+
+    <!-- 1. Tarjetas de Indicadores (KPIs) - Mínimo 4 -->
+    <div class="row g-3 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm border-start border-4 border-primary rounded-3">
+                <div class="card-body">
+                    <div class="text-muted small fw-bold text-uppercase">Total Tickets</div>
+                    <div class="d-flex align-items-center justify-content-between mt-2">
+                        <h2 class="fw-bold mb-0 text-dark">@Model.TotalTickets</h2>
+                        <div class="p-2 bg-primary bg-opacity-15 rounded-3 text-primary"><i class="bi bi-ticket-detailed fs-4"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm border-start border-4 border-warning rounded-3">
+                <div class="card-body">
+                    <div class="text-muted small fw-bold text-uppercase">Pendientes</div>
+                    <div class="d-flex align-items-center justify-content-between mt-2">
+                        <h2 class="fw-bold mb-0 text-dark">@Model.TicketsPendientes</h2>
+                        <div class="p-2 bg-warning bg-opacity-15 rounded-3 text-warning"><i class="bi bi-hourglass-split fs-4"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm border-start border-4 border-info rounded-3">
+                <div class="card-body">
+                    <div class="text-muted small fw-bold text-uppercase">En Proceso</div>
+                    <div class="d-flex align-items-center justify-content-between mt-2">
+                        <h2 class="fw-bold mb-0 text-dark">@Model.TicketsEnProceso</h2>
+                        <div class="p-2 bg-info bg-opacity-15 rounded-3 text-info"><i class="bi bi-gear-wide-connected fs-4"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm border-start border-4 border-success rounded-3">
+                <div class="card-body">
+                    <div class="text-muted small fw-bold text-uppercase">Resueltos / Cerrados</div>
+                    <div class="d-flex align-items-center justify-content-between mt-2">
+                        <h2 class="fw-bold mb-0 text-dark">@Model.TicketsResueltos</h2>
+                        <div class="p-2 bg-success bg-opacity-15 rounded-3 text-success"><i class="bi bi-check-circle-fill fs-4"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Gráficos con Chart.js (Mínimo 2 gráficos) -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-header bg-white py-3">
+                    <h6 class="fw-bold m-0" style="color: var(--color-vino);"><i class="bi bi-bar-chart-fill me-2"></i>Tickets por Categoría</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="chartCategorias" style="max-height: 280px;"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-header bg-white py-3">
+                    <h6 class="fw-bold m-0" style="color: var(--color-vino);"><i class="bi bi-pie-chart-fill me-2"></i>Distribución por Estado</h6>
+                </div>
+                <div class="card-body">
+                    <canvas id="chartEstados" style="max-height: 280px;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Tabla de Últimos Movimientos -->
+    <div class="card border-0 shadow-sm rounded-3">
+        <div class="card-header bg-white py-3">
+            <h6 class="fw-bold m-0" style="color: var(--color-vino);"><i class="bi bi-clock-history me-2"></i>Actividad Reciente / Últimos Tickets</h6>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light text-muted small">
+                        <tr>
+                            <th>#ID</th>
+                            <th>Título</th>
+                            <th>Creador</th>
+                            <th>Prioridad</th>
+                            <th>Estado</th>
+                            <th>Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.UltimosTickets != null && Model.UltimosTickets.Any())
+                        {
+                            foreach (var item in Model.UltimosTickets)
+                            {
+                                <tr>
+                                    <td class="fw-bold">@item.IdTicket</td>
+                                    <td>@item.Titulo</td>
+                                    <td>@item.Creador</td>
+                                    <td><span class="badge bg-secondary">@item.Prioridad</span></td>
+                                    <td><span class="badge bg-dark">@item.Estado</span></td>
+                                    <td class="small text-muted">@item.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center py-4 text-muted">No hay registros recientes para mostrar.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts de Chart.js -->
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Datos inyectados desde C# para el gráfico de barras (Categorías)
+        const ctxCat = document.getElementById('chartCategorias').getContext('2d');
+        new Chart(ctxCat, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CategoriasLabels)),
+                datasets: [{
+                    label: 'Cantidad de Tickets',
+                    data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CategoriasConteo)),
+                    backgroundColor: '#54071E',
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // Datos inyectados desde C# para el gráfico de pastel (Estados)
+        const ctxEst = document.getElementById('chartEstados').getContext('2d');
+        new Chart(ctxEst, {
+            type: 'doughnut',
+            data: {
+                labels: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.EstadosLabels)),
+                datasets: [{
+                    data: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.EstadosConteo)),
+                    backgroundColor: ['#f25022', '#00a4ef', '#7fba00', '#ffb900', '#54071E']
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    </script>
+}

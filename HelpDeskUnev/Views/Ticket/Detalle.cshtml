@@ -1,0 +1,88 @@
+﻿@model HelpDeskUnev.Models.Ticket
+
+@{
+    ViewData["Title"] = "Detalle del Ticket #" + Model.IdTicket;
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0 rounded-3">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
+                    <h5 class="mb-0"><i class="bi bi-ticket-detailed me-2"></i> Ticket #@Model.IdTicket</h5>
+                    <a asp-action="Gestionar" class="btn btn-light btn-sm text-primary fw-bold">Volver al Panel</a>
+                </div>
+                <div class="card-body p-4">
+                    <div class="mb-3">
+                        <label class="fw-bold text-muted">Título / Asunto:</label>
+                        <h4 class="text-dark">@(Model.Titulo ?? Model.Asunto ?? "Sin Título")</h4>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="fw-bold text-muted">Cliente Solicitante:</label>
+                            <p class="fs-6">@(Model.Cliente != null ? $"{Model.Cliente.Nombre} {Model.Cliente.Apellido}" : "N/D")</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold text-muted">Fecha de Creación:</label>
+                            <p class="fs-6">@Model.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="fw-bold text-muted">Categoría:</label>
+                            <p><span class="badge bg-secondary">@(Model.Categoria?.NombreCategoria ?? "N/A")</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold text-muted">Prioridad:</label>
+                            <p><span class="badge bg-info text-dark">@(Model.Prioridad?.Nivel ?? "Normal")</span></p>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="fw-bold text-muted">Descripción del Problema:</label>
+                        <div class="p-3 bg-light rounded border">
+                            @if (!string.IsNullOrEmpty(Model.Descripcion))
+                            {
+                                <p class="mb-0 text-dark" style="white-space: pre-line;">@Model.Descripcion</p>
+                            }
+                            else
+                            {
+                                <p class="mb-0 text-muted fst-italic">Sin descripción detallada proporcionada.</p>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Formulario de Gestión para Técnicos -->
+                    @if (User.IsInRole("Tecnico") || User.IsInRole("Administrador"))
+                    {
+                        <hr class="my-4" />
+                        <form asp-action="ActualizarEstado" method="post">
+                            <input type="hidden" name="idTicket" value="@Model.IdTicket" />
+                            
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Cambiar Estado:</label>
+                                    <select name="idEstado" class="form-select" asp-items="ViewBag.Estados"></select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Asignar Técnico:</label>
+                                    <select name="idTecnico" class="form-select" asp-items="ViewBag.Tecnicos">
+                                        <option value="">-- Sin asignar --</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 text-end">
+                                <button type="submit" class="btn btn-success px-4">
+                                    <i class="bi bi-save me-1"></i> Guardar Cambios
+                                </button>
+                            </div>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

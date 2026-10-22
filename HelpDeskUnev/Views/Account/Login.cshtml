@@ -1,0 +1,81 @@
+﻿@model HelpDeskUnev.Models.LoginViewModel
+
+@{
+    ViewData["Title"] = "Iniciar Sesión";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HelpDesk UNEV</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <style>
+            body {
+                background: linear-gradient(135deg, #7A0C2E 0%, #3D0617 100%);
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .login-card {
+                background-color: #FFFFFF;
+                border-top: 5px solid #D4AF37;
+                border-radius: 12px;
+                box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+                padding: 2.5rem;
+                width: 100%;
+                max-width: 420px;
+            }
+
+            .btn-login {
+                background-color: #7A0C2E;
+                color: #FFFFFF;
+                border: none;
+                font-weight: bold;
+            }
+
+                .btn-login:hover {
+                    background-color: #54071E;
+                    color: #D4AF37;
+                }
+
+            .accent-text {
+                color: #7A0C2E;
+            }
+    </style>
+</head>
+<body>
+    <div class="login-card text-center">
+        <h3 class="fw-bold accent-text mb-1">HelpDesk UNEV</h3>
+        <p class="text-muted small mb-4">Módulo de Soporte Técnico Institucional</p>
+
+        <!-- ALERTA DE ERROR VISIBLE -->
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger p-2 small mb-3 text-center">
+                @ViewBag.Error
+            </div>
+        }
+
+        <form asp-controller="Account" asp-action="Login" method="post">
+            @Html.AntiForgeryToken()
+
+            <div class="form-floating mb-3 text-start">
+                <input name="matricula" class="form-control" placeholder="202X-XXXX" required />
+                <label for="matricula">Matrícula</label>
+            </div>
+
+            <div class="form-floating mb-4 text-start">
+                <input name="contrasena" type="password" class="form-control" placeholder="Contraseña" required />
+                <label for="contrasena">Contraseña</label>
+            </div>
+
+            <button type="submit" class="btn btn-login w-100 py-2 mb-3">Ingresar al Sistema</button>
+        </form>
+    </div>
+</body>
+</html>

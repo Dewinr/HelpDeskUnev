@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HelpDeskUnev.Views.TicketPage"
+             Title="Ticketera">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="12">
+
+            <Label Text="Crear Ticket de Soporte"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <Label Text="Seleccionar Cliente:" FontAttributes="Bold" />
+            <Picker x:Name="pickerClientes"
+                    Title="-- Seleccione un cliente --"
+                    ItemDisplayBinding="{Binding Nombre}" />
+
+            <Label Text="Seleccionar Producto / Servicio:" FontAttributes="Bold" />
+            <Picker x:Name="pickerProductos"
+                    Title="-- Seleccione un producto --"
+                    ItemDisplayBinding="{Binding Nombre}" />
+
+            <Label Text="Prioridad:" FontAttributes="Bold" />
+            <Picker x:Name="pickerPrioridad">
+                <Picker.Items>
+                    <x:String>Baja</x:String>
+                    <x:String>Media</x:String>
+                    <x:String>Alta</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <Entry x:Name="txtAsunto" Placeholder="Asunto / Resumen de la incidencia" />
+            <Editor x:Name="txtDescripcion" Placeholder="Descripción detallada del problema..." HeightRequest="90" />
+
+            <Button Text="Generar Ticket"
+                    BackgroundColor="#D97706"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    Margin="0,10,0,0"
+                    Clicked="OnGuardarTicketClicked" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

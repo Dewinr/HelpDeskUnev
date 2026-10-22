@@ -1,0 +1,132 @@
+﻿@using System.Security.Claims
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Help Desk UNEV</title>
+    
+    <!-- Bootstrap 5 CSS CDN Oficial -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold me-3" asp-controller="Login" asp-action="Index">Help Desk UNEV</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1 align-items-center">
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <!-- Botón de Dashboard EXCLUSIVO para Administradores -->
+                            @if (User.IsInRole("Administrador"))
+                            {
+                                <li class="nav-item">
+                                    <a class="btn btn-light btn-sm me-2 fw-semibold text-dark" asp-controller="Ticket" asp-action="Dashboard">
+                                        <i class="bi bi-speedometer2 me-1 text-danger"></i>Dashboard
+                                    </a>
+                                </li>
+                            }
+
+                            <!-- Opciones para Autoservicio (Clientes, Usuarios y Maestros) -->
+                            @if (User.IsInRole("Cliente") || User.IsInRole("Usuario") || User.IsInRole("Maestro"))
+                            {
+                                <li class="nav-item">
+                                    <a class="btn btn-outline-light btn-sm me-2" asp-controller="Ticket" asp-action="MisTickets">
+                                        <i class="bi bi-list-task me-1"></i>Mis Solicitudes
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="btn btn-outline-light btn-sm me-2" asp-controller="Ticket" asp-action="Crear">
+                                        <i class="bi bi-plus-circle me-1"></i>Nuevo Ticket
+                                    </a>
+                                </li>
+                            }
+
+                            <!-- Opciones operacionales para Técnicos (Panel de Tickets y Reportes) -->
+                            @if (User.IsInRole("Tecnico"))
+                            {
+                                <li class="nav-item">
+                                    <a class="btn btn-outline-light btn-sm me-2" asp-controller="Ticket" asp-action="Gestionar">
+                                        <i class="bi bi-ticket-perforated me-1"></i>Panel de Tickets
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="btn btn-outline-light btn-sm me-2" asp-controller="Reportes" asp-action="Index">
+                                        <i class="bi bi-bar-chart-line me-1"></i>Reportes
+                                    </a>
+                                </li>
+                            }
+
+                            <!-- Opciones exclusivas para Administradores -->
+                            @if (User.IsInRole("Administrador"))
+                            {
+                                <li class="nav-item">
+                                    <a class="btn btn-outline-light btn-sm me-2" asp-controller="Ticket" asp-action="Gestionar">
+                                        <i class="bi bi-ticket-perforated me-1"></i>Panel de Tickets
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="btn btn-outline-light btn-sm me-2" asp-controller="Usuarios" asp-action="Index">
+                                        <i class="bi bi-people me-1"></i>Usuarios
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="btn btn-outline-light btn-sm me-2" asp-controller="Reportes" asp-action="Index">
+                                        <i class="bi bi-bar-chart-line me-1"></i>Reportes
+                                    </a>
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                    <ul class="navbar-nav">
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item me-3 d-flex align-items-center text-white">
+                                <i class="bi bi-person-circle me-1"></i>
+                                Hola, <strong class="ms-1">@User.Identity.Name</strong>
+                                @if (User.FindFirst(ClaimTypes.Role) != null)
+                                {
+                                    <span class="badge bg-light text-dark ms-2">@User.FindFirst(ClaimTypes.Role)?.Value</span>
+                                }
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-outline-light btn-sm" asp-controller="Login" asp-action="Logout">Cerrar sesión</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="btn btn-outline-light btn-sm" asp-controller="Login" asp-action="Index">Iniciar sesión</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- Scripts de Bootstrap y jQuery por CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,52 @@
+﻿@model HelpDeskUnev.Models.Ticket
+
+@{
+    ViewData["Title"] = "Atender Ticket #" + Model.IdTicket;
+}
+
+<div class="container mt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Atención Técnica - Ticket #TK-@Model.IdTicket</h2>
+        <a asp-action="Index" class="btn btn-outline-secondary btn-sm">&larr; Volver al Panel de Control</a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-7">
+            <div class="card card-institucional mb-4">
+                <div class="card-header bg-white fw-bold">Detalle de la Solicitud</div>
+                <div class="card-body">
+                    <h5 class="fw-bold text-dark">@Model.Titulo</h5>
+                    <p class="text-muted small">Enviado por: @Model.Cliente?.Nombre @Model.Cliente?.Apellido (@Model.Cliente?.Correo)</p>
+                    <hr />
+                    <p>@Model.Descripcion</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card card-institucional">
+                <div class="card-header style="background-color: #54071E; color: white;" fw-bold">
+                    Actualizar Estado y Asignación
+                </div>
+                <div class="card-body">
+                    <form asp-action="ActualizarEstado" method="post">
+                        <input type="hidden" name="idTicket" value="@Model.IdTicket" />
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Estado del Ticket</label>
+                            <select name="idEstado" class="form-select" asp-items="ViewBag.Estados" required>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Comentario de Cambio / Solución</label>
+                            <textarea name="comentario" class="form-control" rows="3" placeholder="Explique la acción tomada..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-dorado w-100">Guardar Cambios y Registrar Historial</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

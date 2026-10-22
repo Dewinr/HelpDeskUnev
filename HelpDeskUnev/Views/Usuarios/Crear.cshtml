@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Registrar Usuario - Admin";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card border-0 shadow-sm rounded-3 p-4">
+                <h3 class="fw-bold text-dark mb-3">
+                    <i class="bi bi-person-badge me-2" style="color: #54071E;"></i>Registrar Nuevo Usuario
+                </h3>
+                <p class="text-muted small mb-4">Cree cuentas institucionales asignando el rol correspondiente dentro de la plataforma.</p>
+
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>@ViewBag.Error
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                <form asp-action="Crear" method="post">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Nombre</label>
+                            <input type="text" name="nombre" class="form-control" placeholder="Ej. Juan" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Apellido</label>
+                            <input type="text" name="apellido" class="form-control" placeholder="Ej. Pérez" required />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Matrícula o Usuario</label>
+                        <input type="text" name="matricula" class="form-control" placeholder="Ej. 2024-0000 o admin2" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Correo Electrónico</label>
+                        <input type="email" name="correo" class="form-control" placeholder="correo@unev.edu.do" required />
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Contraseña Temporal</label>
+                            <input type="password" name="password" class="form-control" placeholder="••••••••" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Rol del Sistema</label>
+                            <select name="tipoRol" class="form-select" required>
+                                <option value="Cliente" selected>Cliente (Estudiante)</option>
+                                <option value="Maestro">Maestro / Docente</option>
+                                <option value="Tecnico">Técnico de Soporte</option>
+                                <option value="Administrador">Administrador del Sistema</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a>
+                        <button type="submit" class="btn text-white px-4" style="background-color: #54071E;">Guardar Usuario</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

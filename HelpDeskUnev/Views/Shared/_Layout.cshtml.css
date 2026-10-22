@@ -1,0 +1,67 @@
+﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+:root {
+    --vino-institucional: #7A0C2E;
+    --vino-oscuro: #54071E;
+    --dorado-institucional: #D4AF37;
+    --dorado-brillante: #F3C623;
+    --blanco: #FFFFFF;
+    --gris-fondo: #F8F9FA;
+    --texto-oscuro: #2D3748;
+}
+
+body {
+    background-color: var(--gris-fondo);
+    color: var(--texto-oscuro);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Navbar Institucional */
+.navbar-custom {
+    background-color: var(--vino-institucional) !important;
+    border-bottom: 3px solid var(--dorado-institucional);
+}
+
+    .navbar-custom .navbar-brand,
+    .navbar-custom .nav-link {
+        color: var(--blanco) !important;
+        font-weight: 600;
+    }
+
+        .navbar-custom .nav-link:hover {
+            color: var(--dorado-institucional) !important;
+        }
+
+/* Botones con Identidad de Marca */
+.btn-vino {
+    background-color: var(--vino-institucional);
+    color: var(--blanco);
+    border: 1px solid var(--vino-oscuro);
+    transition: all 0.3s ease;
+}
+
+    .btn-vino:hover {
+        background-color: var(--vino-oscuro);
+        color: var(--dorado-institucional);
+    }
+
+.btn-dorado {
+    background-color: var(--dorado-institucional);
+    color: var(--vino-oscuro);
+    font-weight: bold;
+    border: none;
+}
+
+    .btn-dorado:hover {
+        background-color: var(--dorado-brillante);
+        color: var(--vino-oscuro);
+    }
+
+/* Tarjetas */
+.card-institucional {
+    border: 1px solid #E2E8F0;
+    border-top: 4px solid var(--vino-institucional);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}

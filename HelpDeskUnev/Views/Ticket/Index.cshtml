@@ -1,0 +1,120 @@
+﻿@model IEnumerable<HelpDeskUnev.Models.Ticket>
+
+@{
+    ViewData["Title"] = "Panel de Soporte Técnico";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-6">
+            <h2 class="fw-bold">Gestión de Tickets de Soporte</h2>
+            <p class="text-muted">Consola central de resolución de incidencias institucionales</p>
+        </div>
+        <div class="col-md-6 text-end">
+            <!-- Botón para abrir el Modal de Crear (Fase 3) -->
+            <button type="button" class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#modalCrearTicket">
+                <i class="bi bi-plus-circle"></i> + Nuevo Ticket
+            </button>
+            <span class="badge p-2" style="background-color: #D4AF37; color: #54071E; font-size: 0.9rem;">
+                Panel Técnico
+            </span>
+        </div>
+    </div>
+
+    <div class="card card-institucional shadow-sm">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle mb-0">
+                    <thead style="background-color: #54071E; color: #FFFFFF;">
+                        <tr>
+                            <th>ID</th>
+                            <th>Estudiante / Usuario</th>
+                            <th>Título</th>
+                            <th>Categoría</th>
+                            <th>Asunto</th>
+                            <th>Prioridad</th>
+                            <th>Estado</th>
+                            <th>Técnico Asignado</th>
+                            <th class="text-center">Gestión</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="9" class="text-center py-4 text-muted">
+                                    No hay tickets registrados en el sistema.
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (var ticket in Model)
+                            {
+                                <tr>
+                                    <td><strong>#@ticket.IdTicket</strong></td>
+                                    <td>@(ticket.Cliente != null ? $"{ticket.Cliente.Nombre} {ticket.Cliente.Apellido}" : "N/A")</td>
+                                    <td>@(ticket.Titulo ?? "Sin Título")</td>
+                                    <td>@(ticket.Categoria?.NombreCategoria ?? "Sin Categoría")</td>
+                                    <td>@ticket.Asunto</td>
+                                    <td>
+                                        <span class="badge bg-warning text-dark">
+                                            @(ticket.Prioridad?.Nivel ?? "Normal")
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-info text-dark">
+                                            @(ticket.Estado?.NombreEstado ?? ticket.Estado?.Nombre ?? "Pendiente")
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @(ticket.Tecnico != null ? ticket.Tecnico.Nombre : "Sin Asignar")
+                                    </td>
+                                    <td class="text-center">
+                                        <a asp-action="Atender" asp-route-id="@ticket.IdTicket" class="btn btn-sm btn-vino me-1" style="background-color: #54071E; color: white;">
+                                            Atender
+                                        </a>
+                                        <!-- Botón de eliminar con confirmación previa (Fase 3) -->
+                                        <a asp-action="Eliminar" asp-route-id="@ticket.IdTicket" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este ticket permanentemente?');">
+                                            Eliminar
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========================================== -->
+<!-- VENTANA MODAL DE BOOTSTRAP 5 (FASE 3)      -->
+<!-- ========================================== -->
+<div class="modal fade" id="modalCrearTicket" tabindex="-1" aria-labelledby="modalCrearTicketLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #54071E; color: #FFFFFF;">
+                <h5 class="modal-title" id="modalCrearTicketLabel">Registrar Nuevo Ticket</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="Crear" method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Título del Ticket</label>
+                        <input type="text" name="Titulo" class="form-control" placeholder="Ej. Error de acceso al sistema" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Descripción o Asunto</label>
+                        <textarea name="Asunto" class="form-control" rows="3" placeholder="Describa el inconveniente..." required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" style="background-color: #54071E; border-color: #54071E;">Guardar Ticket</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

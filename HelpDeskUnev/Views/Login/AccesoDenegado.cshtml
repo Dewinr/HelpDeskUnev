@@ -1,0 +1,73 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Acceso Restringido - Help Desk UNEV";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+    
+    <style>
+        body {
+            background-color: #54071E !important;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .error-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+            background-color: #FFFFFF;
+        }
+        .btn-institucional {
+            background-color: #54071E;
+            color: #FFFFFF;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-weight: 700;
+            border-radius: 8px;
+        }
+        .btn-institucional:hover {
+            background-color: #3b0414;
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+<body class="d-flex align-items-center justify-content-center min-vh-100">
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5 text-center">
+                <div class="card error-card p-4 p-md-5">
+                    <div class="mb-3">
+                        <div class="d-inline-block p-3 rounded-circle bg-danger-subtle text-danger mb-2">
+                            <i class="bi bi-shield-slash-fill fs-1"></i>
+                        </div>
+                    </div>
+                    
+                    <h3 class="fw-bold text-dark mb-2">Acceso Restringido (403)</h3>
+                    <p class="text-muted mb-4">
+                        @(ViewBag.Error ?? "No posees las credenciales o permisos de rol (RBAC) suficientes para consultar este módulo.")
+                    </p>
+
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                        <a asp-controller="Ticket" asp-action="Index" class="btn btn-institucional shadow-sm">
+                            <i class="bi bi-house-door-fill me-1"></i> Volver al Inicio
+                        </a>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-top">
+                        <small class="text-muted">Módulo de Seguridad Help Desk UNEV &copy; 2026</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
