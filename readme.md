@@ -4,7 +4,7 @@ Sistema de gestión de tickets de soporte técnico y solicitudes académicas par
 
 ## 🔗 Enlace de Publicación en la Nube
 
-* **URL Pública:** <http://dewinrh-001-site1.ftempurl.com> *(Servidor MyASP.NET)*
+* **URL Pública:** <https://dewinrh-001-site1.itempurl.com> *(Servidor MyASP.NET)*
 
 ## 👥 Credenciales de Prueba (Fase 4 y 7)
 
